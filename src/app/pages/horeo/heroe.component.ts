@@ -1,10 +1,12 @@
-import { collectExternalReferences } from '@angular/compiler';
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { HeroesService } from 'src/app/services/heroes.service';
 import { HeroeModel } from '../../models/heroe.model';
 import Swal from 'sweetalert2';
 import { Observable } from 'rxjs';
+
+
 @Component({
   selector: 'app-horeo',
   templateUrl: './heroe.component.html',
@@ -13,10 +15,22 @@ import { Observable } from 'rxjs';
 export class HeroeComponent implements OnInit {
 
   heroe = new HeroeModel();
-  constructor(private heroeService: HeroesService) { }
+  constructor(private heroeService: HeroesService,
+              private activatedRoute: ActivatedRoute) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+
+    const id : string = this.activatedRoute.snapshot.paramMap.get('id')!
+
+    if( id !== 'nuevo'){
+      this.heroeService.getHeroe(id).subscribe( (resp:any) =>
+        {
+            this.heroe = resp;
+            this.heroe.id = id;
+        });
+    }
   }
+
   guardar(forma:NgForm){
    if(forma.invalid){ 
     console.log("Heroe no valido")

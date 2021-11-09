@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { HeroeModel } from '../models/heroe.model';
-import {map } from 'rxjs/operators'
+import {delay, map } from 'rxjs/operators'
 import { ObjectUnsubscribedError } from 'rxjs';
 
 @Injectable({
@@ -27,6 +27,15 @@ export class HeroesService {
   )
   }
 
+  borrarHeroe(id:string){
+
+    return this.http.delete(`${this.url}/heroes/${id}.json` )
+  }
+  getHeroe(id: string){
+    return this.http.get(`${this.url}/heroes/${id}.json`)
+
+  }
+
   actualizarHeroe(heroe:HeroeModel){
     //.json para apuntar a la rest API
 
@@ -43,9 +52,12 @@ export class HeroesService {
 
     return this.http.get(`${this.url}/heroes.json`)
     .pipe(
-      map( this.crearArrayHeroes) //Modificacion de la respuesta para convertirla en un array iterable
+      map( this.crearArrayHeroes),
+      delay(1500) //Modificacion de la respuesta para convertirla en un array iterable
     )
   }
+
+
 
   private crearArrayHeroes( heroesObj:   any){
     //Crear el tipo de dato de heroe y array vacio
