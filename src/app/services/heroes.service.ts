@@ -25,4 +25,21 @@ export class HeroesService {
     })
   )
   }
+
+  actualizarHeroe(heroe:HeroeModel){
+    //.json para apuntar a la rest API
+
+    const heroeTemp ={
+      ...heroe
+    }
+    //Elimicacion del ID duplicado
+    delete heroeTemp.id
+    return this.http.put(`${this.url}/heroes/${heroe.id}.json`,heroeTemp)
+
+  }
+
+
+
 }
+
+
