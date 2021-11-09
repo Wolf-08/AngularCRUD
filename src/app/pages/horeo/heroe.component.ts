@@ -1,4 +1,8 @@
+import { collectExternalReferences } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
+import { NgForm, NgModel } from '@angular/forms';
+import { HeroesService } from 'src/app/services/heroes.service';
+import { HeroeModel } from '../../models/heroe.model';
 
 @Component({
   selector: 'app-horeo',
@@ -7,9 +11,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeroeComponent implements OnInit {
 
-  constructor() { }
+  heroe = new HeroeModel();
+  constructor(private heroeService: HeroesService) { }
 
   ngOnInit(): void {
   }
-
+  guardar(forma:NgForm){
+   if(forma.invalid){ 
+    console.log("Heroe no valido")
+    return;
+    }
+  this.heroeService.crearHeroes(this.heroe).subscribe( respuesta => {
+    console.log(respuesta);
+  })
+  }
 }
